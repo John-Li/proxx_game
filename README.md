@@ -9,7 +9,7 @@ An unrevealed cell might have a black hole behind it, it might not. The idea is 
 But, cells are unrevealed, right? So how are you supposed to avoid them?
 
 Here's how: If you avoid revealing a black hole during the move, the number tells you how many of the 8 surrounding cells are a black hole. If it's blank, none of the surrounding cells is a black hole.
-Continue moving and revealing cells untill only the one with a black hole behind it are unrevealed.
+Continue moving and revealing cells until only those with a black hole behind it are unrevealed.
 
 ## How to run a game
 ### If you have ruby >= 2.7 installed
