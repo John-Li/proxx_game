@@ -1,14 +1,27 @@
-require_relative 'proxx_game/logic'
+require_relative 'proxx_game/proxx_game'
 
 puts "Welcome to Proxx Game!"
-print "Enter board dimentions (rows x columns, e.g. 10): "
-board_dimentions = gets.chomp.to_i
-print "Enter the number of Black holes: "
-num_holes = gets.chomp.to_i
+
+# Validation loop
+board = nil
+while true
+  print "Enter board dimentions (rows x columns, e.g. 10): "
+  board_dimentions = gets.chomp.to_i
+  print "Enter the number of Black holes: "
+  num_holes = gets.chomp.to_i
+  begin
+    board = Board.new(board_dimentions, num_holes)
+    break
+  rescue Board::BoardArgumentError => e
+    puts
+    puts e.message
+    puts
+  end
+end
+
+game = ProxxGame.new(board)
 
 # Gameplay loop
-game = ProxxGame.new(board_dimentions, num_holes)
-
 while true
   puts "Current state:"
   game.display_board
@@ -16,8 +29,6 @@ while true
   input = gets.strip.split
   row, col = input[0].to_i, input[1].to_i
 
-  result = game.move(row, col)
-  if result == false
-    break
-  end
+  game.move(row, col)
+  break if game.won? || game.lost?
 end
