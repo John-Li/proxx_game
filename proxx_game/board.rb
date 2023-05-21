@@ -28,9 +28,14 @@ class Board
 
     cell(row, col).reveal
 
+    # if a cell with no adjacent holes is revealed, all its adjacent cells are also revealed
     if cell(row, col).adjacent_holes == 0
+      # check all cells adjacent to the hole
+      # use [-1, 0, 1] to generate all possible relative positions of the cells around the current cell
+      # where (0, 0) would refer to the current cell itself.
       [-1, 0, 1].each do |row_diff|
         [-1, 0, 1].each do |col_diff|
+          # call reveal_cells recursively for all cells adjacent to the cell unless it is the cell itself
           reveal_cells(row + row_diff, col + col_diff) unless row_diff == 0 && col_diff == 0
         end
       end
@@ -60,7 +65,9 @@ class Board
   end
 
   def place_holes(num_holes)
+    # generate all possible cell positions
     positions = (0...row_size).to_a.product((0...col_size).to_a)
+    # take random num_holes cell positions
     positions.sample(num_holes).each do |row, col|
       cell(row, col).to_hole
     end
@@ -70,10 +77,16 @@ class Board
     layout.each_with_index do |row, row_idx|
       row.each_with_index do |cell, col_idx|
         next unless cell.hole?
+        # check all cells adjacent to the hole
+        # use [-1, 0, 1] to generate all possible relative positions of the cells around the current cell
+        # where (0, 0) would refer to the current cell itself.
         [-1, 0, 1].each do |row_diff|
           [-1, 0, 1].each do |col_diff|
+            # ensure that the cell does not check itself
             next if row_diff == 0 && col_diff == 0
+            # calculate the absolute position of the adjacent cell 
             adj_row, adj_col = row_idx + row_diff, col_idx + col_diff
+            # ignore cells around the board
             if in_board_bounds?(adj_row, adj_col)
               cell(adj_row, adj_col).adjacent_holes += 1
             end
